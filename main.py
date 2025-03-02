@@ -14,10 +14,9 @@ mydb = mysql.connector.connect(
     password = db_password,
     database = "movies"
 )
-cursor = mydb.cursor()
-mydb.commit()
-
+#cursor = mydb.cursor()
+#mydb.commit()
 engine = create_engine(f"mysql+pymysql://{db_user}:{db_password}@127.0.0.1/movies")
 
-
-myvar.to_sql(name = "movies", con = engine, if_exists = "append", index = False)
+df = pd.read_csv('E:/DataEngineer/etl-movies/movies.csv')
+df.to_sql(name = "movies", con = engine, if_exists = "append", index = False)
