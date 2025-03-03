@@ -1,27 +1,26 @@
-import os
-import pandas as pd
-import mysql.connector
-import pymysql
-from sqlalchemy import create_engine
+from etl_pipeline.extract import extract_data
+from etl_pipeline.transform import transform_data
+from etl_pipeline.load import load_data
 
+file_path = "E:/DataEngineer/etl-movies/data/top1000.csv"
 
-# Conectar base de datos MySQL
-db_user = os.getenv("DB-USER")
-db_password = os.getenv("DB-PASSWORD")
-if not db_user or not db_password:
-    raise ValueError("Las credenciales no estan definidas en las variables de entorno")
-mydb = mysql.connector.connect(
-    host = "127.0.0.1",
-    user = db_user,
-    password = db_password,
-    database = "movies"
-)
-engine = create_engine(f"mysql+pymysql://{db_user}:{db_password}@127.0.0.1/movies")
+def run_pipeline():
+    df = extract_data(file_path)
+    clean_df = transform_data(df)
+    load_data(clean_df, "top1000")
+
+if __name__ == "__main__":
+    run_pipeline()
 
 
 
-df = pd.read_csv('E:/DataEngineer/etl-movies/data/top1000.csv')
-print(df.columns)
-clean_df = df.drop(['Poster_Link', 'Certificate', 'Meta_score', 'Gross'  ], axis = 1)
-print(clean_df)
-clean_df.to_sql(name = "top1000", con = engine, if_exists = "replace", index = False)
+
+
+
+
+
+
+
+
+
+
